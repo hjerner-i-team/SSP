@@ -1,4 +1,4 @@
-from CREPE import CREPE
+from CREPE import CREPE, CrepeModus
 from CREPE.utils import get_connection
 from CREPE.communication.stream_service import StreamRowIterator, StreamSegmentIterator
 
@@ -15,7 +15,7 @@ def main():
     path_to_data = path_to_test_data_folder + "4.h5"
 
     #Create a crepe object and start it
-    crep = CREPE(path_to_data)
+    crep = CREPE(modus=CrepeModus.FILE, path_to_file=path_to_data)
          
     # Get the connection for the stream whichs contains the data
     conn = get_connection("STREAM")
