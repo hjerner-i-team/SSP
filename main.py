@@ -1,6 +1,8 @@
 from CREPE import CREPE
 from CREPE.utils import get_connection
 from CREPE.communication.stream_service import StreamRowIterator, StreamSegmentIterator
+from CREPE.communication.hdf5_reader import HDF5Reader 
+from CREPE.settings import RPCPORTS, RPYC_CONFIG
 
 import os,sys,inspect 
 # Find the path to the test_data folder.
@@ -12,9 +14,17 @@ path_to_test_data_folder = __currentdir + "/test_data/"
 def main():
     # Get the absolute path for the test file
     path_to_data = path_to_test_data_folder + "4.h5"
+    h5 = HDF5Reader(path_to_data)
+    
+    h5.generate_H5_stream()
+
+    h5.start_service("STREAM")
+    
+    print("this")
+
 
     #Create a crepe object and start it
-    crep = CREPE("__TESTING")
+    #crep = CREPE("__TESTING")
          
     # Get the connection for the stream whichs contains the data
     conn = get_connection("STREAM")
@@ -26,7 +36,6 @@ def main():
     len_of_stream = 0
     
     print("Starting to iterate")
-
     # Now we want to iterate 
     while True:
         # Get the next set of data. 
@@ -41,8 +50,9 @@ def main():
 
     print("The length from the stream was: ", len_of_stream)
     
+    h5.terminate_service()
     # Shutdown crepe
-    crep.shutdown()
+    #crep.shutdown()
 
 if __name__ == "__main__":
     main()
