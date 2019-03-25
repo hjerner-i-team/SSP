@@ -24,9 +24,6 @@ class LoopService(rpyc.Service):
         self.conn = rpyc.connect("localhost", port=port, config=RPYC_CONFIG)
         print(self.name, " connected with conn ", self.conn, " with root object: ", self.conn.root)
     
-    def register_loop_function(self, loop_function):
-        self.loop_function = loop_function
-
     def _start_service(self):
         print("Starting ", self.name, " rpyc treadh with self: ", self)
         self.rpyc_thread = ThreadedServer(self, port=self.port, protocol_config=RPYC_CONFIG)
@@ -37,11 +34,6 @@ class LoopService(rpyc.Service):
         self.rpyc_process = Process(target=self._start_service)
         self.rpyc_process.start()
 
-    def run(self):
-        print("Starting ", self.name, " loop with self: ", self)
-        self.loop_process = Process(target=self.loop_function)
-        self.loop_process.start()
-    
     def exposed_get_data(self):
         print(self.name, " get_data was called and returns data: ", self.data)
         return self.data
@@ -49,7 +41,6 @@ class LoopService(rpyc.Service):
 class GenerateData(LoopService):
     def __init__(self):
         LoopService.__init__(self, "GENDATA", 18861 )
-        LoopService.register_loop_function(self, self.loop)
 
     def loop(self):
         i = 0
@@ -62,7 +53,6 @@ class GenerateData(LoopService):
 class ProcessData(LoopService):
     def __init__(self):
         LoopService.__init__(self, "PROCESSDATA", 18862)
-        LoopService.register_loop_function(self, self.loop)
 
     def loop(self):
         while True:
@@ -75,15 +65,22 @@ class ProcessData(LoopService):
     def process_data(self, data):
         return sum(data)
 
+def generate_data():
+    gen_data = GenerateData()
+    gen_data.start_service()
+    gen_data.loop()
+
+def process_data():
+    process_data = ProcessData()
+    process_data.connect(18861)
+    process_data.loop()
 
 if __name__ == "__main__":
-    gen_data = GenerateData()
-    gen_data.run()
-    gen_data.start_service()
+    gen_data_process = Process(target=generate_data)
+    gen_data_process.start()
 
-    process_data = ProcessData()
-    process_data.connect(gen_data.port)
-    process_data.run()
+    pro_data_process = Process(target=process_data)
+    pro_data_process.start()
 
     while True:
         pass
