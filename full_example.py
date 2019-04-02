@@ -1,9 +1,8 @@
-
 from CREPE import CREPE, CrepeModus
 from CREPE.communication.stream_service import StreamRowIterator, StreamSegmentIterator
 from pre_processing import AvgPreProcess
 from readout import readout_layer
-
+import time
 import os,sys,inspect 
 # Find the path to the test_data folder.
 __currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -25,16 +24,15 @@ def main():
     
     # get the stream connection
     stream_conn = crep.get_connection("STREAM")
-    print("[full example] pre: ", stream_conn)
-    print("[full example] pre: ", stream_conn.root)
+    
+    time.sleep(3)
 
     # create pre process object
-    pre = AvgPreProcess(name, port)
-    
-    print("[full example] pre: ", pre)
 
-    pre.start(stream_conn)
-    
+    AvgPreProcess.init_and_run(name, port, stream_conn) 
+    loop_process = Process(target=AvgPreProcess.init_and_run, args=[name, port, stream_conn])
+    loop_process.start()
+
     while True:
         pass
     
