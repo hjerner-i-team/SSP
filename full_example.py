@@ -1,4 +1,7 @@
 from CREPE import CREPE, CrepeModus
+from moving_average import MovingAvg
+from readout_layer import ReadoutLayer
+from CREPE.utils.get_queue import get_queue
 import time
 import os,sys,inspect 
 # Find the path to the test_data folder.
@@ -10,9 +13,27 @@ def main():
     # Get the absolute path for the test file
     path_to_data = path_to_test_data_folder + "4.h5"
 
+    # Make functions ready to be inserted into the pipeline
+    queue_services = list()
+
+    mov_avg_kwargs = {"mov_avg_size":500}    
+    queue_services.append([MovingAvg, mov_avg_kwargs])
+
+    readout_layer_kwargs = {}
+    queue_services.append([ReadoutLayer, readout_layer_kwargs])
+
     #Create a crepe object and start it
-    crep = CREPE(path_to_file=path_to_data)
-   
+    crep = CREPE(modus=CrepeModus.FILE, file_path=path_to_data, queue_services=queue_services)
+    
+    readout_queue = get_queue(crep, "READOUTLAYER")
+    while True:
+        data = readout_queue.get()
+        #print("Got: ", data)
+
+
+    crep.shutdown()
+
+
 
 if __name__ == "__main__":
     main()
