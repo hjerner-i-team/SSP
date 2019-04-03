@@ -16,11 +16,12 @@ def main():
 
     #Create a crepe object and start it
     crep = CREPE(modus=CrepeModus.FILE, file_path=file_path)    
-    
+    """ choose one of the different examples: """ 
     #get_data_from_meame_direct_from_queue(crep)
     get_data_from_meame_with_helper(crep)
     #get_data_from_meame_with_easier_helper(crep)
 
+# uses the queue directly, we would not recomend to do it this way tho
 def get_data_from_meame_direct_from_queue(crep):
     # Get the hdf5 queue
     queue = crep.get_first_queue()
@@ -45,21 +46,31 @@ def get_data_from_meame_direct_from_queue(crep):
     # Shutdown crepe
     crep.shutdown()
 
+# gets the data with help from QueueService class (Recomended)
 def get_data_from_meame_with_helper(crep):
+    # create a QueueService object
+    # crep.get_first_queue gets the HDF5Reader/NeuroProcessing/MeameListener queue
+    # If you want to get the queue from MeameSpeaker then use crep.get_last_queue()
     helper = QueueService(name="HELPER", queue_in=crep.get_first_queue())
     i = 0
     while True:
+        # get the next element
         data = helper.get()
+        # check if the element was a poisonous pill (aka the last element)
         if data is False:
             crep.shutdown()
             break
         i += len(data[0])
     print("Got ", i, " elements in each row")
 
+# Alternative way to read from the last queue. (easy, but not that customizable)
 def get_data_from_meame_with_easier_helper(crep):
+    # make a function that will do something with the data
     def data_func(data):
         #do something with data, for example print it
         print(data)
+
+    #this function reads from the last queue untill it's end
     crep.wait(data_func)
 
 if __name__ == "__main__":
