@@ -21,6 +21,10 @@ class MovingAvg(QueueService):
             #print(self.name, " capacity of stream: ", self.stream.capacity, " len: ", len(self.stream))
             if (i + self.mov_avg_size >= len(self.stream)):
                 data = self.get()
+                if data is False:
+                    self.end()
+                    return
+
                 self.stream.add(data)
             processed = self.moving_average(i) 
             self.put(processed)

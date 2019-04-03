@@ -1,4 +1,5 @@
 from CREPE import CREPE, CrepeModus
+from CREPE.communication.queue_service import QueueService
 from moving_average import MovingAvg
 from readout_layer import ReadoutLayer
 from CREPE.utils.get_queue import get_queue
@@ -23,15 +24,15 @@ def main():
     queue_services.append([ReadoutLayer, readout_layer_kwargs])
 
     #Create a crepe object and start it
-    crep = CREPE(modus=CrepeModus.FILE, file_path=path_to_data, queue_services=queue_services)
-    
-    readout_queue = get_queue(crep, "READOUTLAYER")
+    crep = CREPE(modus=CrepeModus.LIVE, file_path=path_to_data, queue_services=queue_services)
+   
+    end = QueueService(name="END", queue_in=crep.get_last_queue())
     while True:
-        data = readout_queue.get()
-        #print("Got: ", data)
+        data = end.get()
+        if data is False:
+            crep.shutdown()
+            return
 
-
-    crep.shutdown()
 
 
 
