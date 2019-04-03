@@ -25,14 +25,17 @@ def main():
 
     #Create a crepe object and start it
     crep = CREPE(modus=CrepeModus.LIVE, file_path=path_to_data, queue_services=queue_services)
-   
+    
+    crep.wait()
+    # crep.wait(lambda data: print(data))
+    """ Alternative to crep.wait() in case you want to do something with the last queue/data
     end = QueueService(name="END", queue_in=crep.get_last_queue())
     while True:
         data = end.get()
         if data is False:
             crep.shutdown()
             return
-
+    """
 
 
 
