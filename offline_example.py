@@ -1,6 +1,7 @@
 from CREPE import CREPE, CrepeModus
 from CREPE.utils.get_queue import get_queue
 from CREPE.neuro_processing.neuro_processing import NeuroProcessor
+from CREPE.communication.queue_service import QueueService
 import time
 import os,sys,inspect 
 # Find the path to the test_data folder.
@@ -16,10 +17,15 @@ def main():
 
     crep = CREPE(modus=CrepeModus.OFFLINE)#, queue_services=queue_services)
 
-    readout_queue = get_queue(crep, "NEUROPROCESSOR")
+    #readout_queue = get_queue(crep, "NEUROPROCESSOR")
+    end = QueueService(name="END", queue_in=crep.get_last_queue())
     while True:
-        data = readout_queue.get()
+        data = end.get()
         print("Got: ", data)
+        if data is False:
+            print("shutting down crepe")
+            crep.shutdown()
+            return
 
 if __name__ == "__main__":
     main()
