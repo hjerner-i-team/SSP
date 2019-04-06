@@ -1,7 +1,6 @@
 from CREPE import CREPE, CrepeModus
 from readout_layer import ReadoutLayer
 from CREPE.utils.get_queue import get_queue
-#import hw_api
 from CREPE.communication.hw_api.hw_api import HWAPIWrapper
 import time
 import os,sys,inspect 
@@ -18,7 +17,7 @@ def main():
     queue_services = list()
 
     mov_avg_kwargs = {}    
-    queue_services.append([hw_api.HWAPIWrapper, mov_avg_kwargs])
+    queue_services.append([HWAPIWrapper, mov_avg_kwargs])
 
     #Create a crepe object and start it
     crep = CREPE(modus=CrepeModus.LIVE, file_path=path_to_data, queue_services=queue_services)
