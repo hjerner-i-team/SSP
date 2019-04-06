@@ -1,7 +1,8 @@
 from CREPE import CREPE, CrepeModus
 from readout_layer import ReadoutLayer
 from CREPE.utils.get_queue import get_queue
-import hw_api
+#import hw_api
+from CREPE.communication.hw_api.hw_api import HWAPIWrapper
 import time
 import os,sys,inspect 
 # Find the path to the test_data folder.
