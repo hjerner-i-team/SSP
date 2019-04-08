@@ -1,6 +1,7 @@
 import json
 from CREPE.communication.queue_service import QueueService
-import CREPE.communication.meame_speaker as ms
+from CREPE.communication.meame_speaker.config_decimal import *
+from CREPE.communication.meame_speaker.speaker import *
 
 
 # TODO: Input validation and error messages
@@ -36,7 +37,8 @@ class IRPreprocessor(QueueService):
         self.paper_threshold = 36  # TODO: placeholder
 
         # Initialize the MEAME server with desired config
-        ms.template_setup() 
+        #do_remote_example()
+        template_setup()
         
 
     def run(self):
@@ -91,4 +93,4 @@ class IRPreprocessor(QueueService):
             "Scissors": 1650,
             "Paper": 1250,
         }
-        ms.set_stim(self.stim_group, periods[guess])
+        set_stim(self.stim_group, periods[guess])
