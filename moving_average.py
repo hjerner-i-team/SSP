@@ -2,8 +2,8 @@ from CREPE import QueueService, GrowingArray
 import numpy as np
 
 class MovingAvg(QueueService):
-    def __init__(self, queue_out, queue_in, mov_avg_size=1000):
-        QueueService.__init__(self, name="MOVINGAVG" , queue_out=queue_out, queue_in=queue_in)
+    def __init__(self, mov_avg_size=1000, **kwargs):
+        QueueService.__init__(self, name="MOVINGAVG" , **kwargs)
 
         self.mov_avg_size = mov_avg_size
         

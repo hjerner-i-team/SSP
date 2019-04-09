@@ -16,13 +16,12 @@ from CREPE.communication.meame_speaker.speaker import *
 
 class IRPreprocessor(QueueService):
 
-    def __init__(self, queue_out, queue_in, name="IRPrePros"):
+    def __init__(self, name="IRPrePros", **kwargs):
         # Initialize queue service
         QueueService.__init__(
             self, 
             name=name, 
-            queue_out=queue_out, 
-            queue_in=queue_in
+            **kwargs
         )
         # Pre-defined stimuli group to work with
         self.stim_group = 0
