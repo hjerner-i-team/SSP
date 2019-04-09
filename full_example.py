@@ -1,10 +1,10 @@
-from CREPE import CREPE, CrepeModus
-from CREPE.communication.queue_service import QueueService
+from CREPE import CREPE, CrepeModus, QueueService, get_queue
+
 from moving_average import MovingAvg
 from readout_layer import ReadoutLayer
-from CREPE.utils.get_queue import get_queue
 import time
 import os,sys,inspect 
+
 # Find the path to the test_data folder.
 __currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 path_to_test_data_folder = __currentdir + "/test_data/"
@@ -24,7 +24,7 @@ def main():
     queue_services.append([ReadoutLayer, readout_layer_kwargs])
 
     #Create a crepe object and start it
-    crep = CREPE(modus=CrepeModus.LIVE, file_path=path_to_data, queue_services=queue_services)
+    crep = CREPE(modus=CrepeModus.TEST, file_path=path_to_data, queue_services=queue_services)
     
     crep.wait()
     # if you want to do something with the data from the last queue, then send in a function:

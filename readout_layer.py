@@ -1,4 +1,4 @@
-from CREPE.communication.queue_service import QueueService
+from CREPE import QueueService
 import random
 
 

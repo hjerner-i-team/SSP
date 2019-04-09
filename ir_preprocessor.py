@@ -1,5 +1,5 @@
 import json
-from CREPE.communication.queue_service import QueueService
+from CREPE import QueueService
 from CREPE.communication.meame_speaker.config_decimal import *
 from CREPE.communication.meame_speaker.speaker import *
 

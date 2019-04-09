@@ -1,6 +1,4 @@
-from CREPE import CREPE, CrepeModus
-from CREPE.utils.get_queue import get_queue 
-from CREPE.communication.queue_service import is_poison_pill, QueueService
+from CREPE import CREPE, CrepeModus, get_queue, is_poison_pill, QueueService
 
 import time
 import os,sys,inspect 

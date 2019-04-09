@@ -1,5 +1,4 @@
-from CREPE import CREPE
-from CREPE.communication.hdf5_reader import HDF5Reader 
+from CREPE import CREPE, HDF5Reader 
 
 import os,sys,inspect 
 # Find the path to the test_data folder.

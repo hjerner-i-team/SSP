@@ -1,5 +1,4 @@
-from CREPE.communication.queue_service import QueueService
-from CREPE.utils.growing_np_array import Array
+from CREPE import QueueService, GrowingArray
 import numpy as np
 
 class MovingAvg(QueueService):
@@ -8,7 +7,7 @@ class MovingAvg(QueueService):
 
         self.mov_avg_size = mov_avg_size
         
-        self.stream = Array(60, self.mov_avg_size * 2)
+        self.stream = GrowingArray(60, self.mov_avg_size * 2)
 
         data = self.get_x_elems(x_elems=self.mov_avg_size)
         self.stream.add(data)

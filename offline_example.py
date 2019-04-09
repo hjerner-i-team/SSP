@@ -1,7 +1,5 @@
-from CREPE import CREPE, CrepeModus
-from CREPE.utils.get_queue import get_queue
-from CREPE.neuro_processing.neuro_processing import NeuroProcessor
-from CREPE.communication.queue_service import QueueService
+from CREPE import CREPE, CrepeModus, get_queue, QueueService, NeuroProcessor
+
 import time
 import os,sys,inspect 
 # Find the path to the test_data folder.

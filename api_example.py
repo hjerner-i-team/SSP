@@ -1,9 +1,9 @@
-from CREPE import CREPE, CrepeModus
+from CREPE import CREPE, CrepeModus, get_queue, HWAPIWrapper
+
 from readout_layer import ReadoutLayer
-from CREPE.utils.get_queue import get_queue
-from CREPE.communication.hw_api.hw_api import HWAPIWrapper
 import time
 import os,sys,inspect 
+
 from ir_preprocessor import IRPreprocessor
 # Find the path to the test_data folder.
 __currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
