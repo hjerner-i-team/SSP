@@ -1,4 +1,4 @@
-from CREPE import CREPE, CrepeModus, get_queue, QueueService, NeuroProcessor
+from CREPE import CREPE, CrepeModus, get_queue, QueueService 
 
 import time
 import os,sys,inspect 
@@ -27,17 +27,46 @@ class FrequencyExtractor(QueueService):
             top_freq = np.argmax(np.abs(F[:,:self.cutoff]), axis = 1)/T
             self.put(top_freq)
         
-#class MeameDecoder(QueueService):
-#    outputchannels = [0,3,6
+class MeameDecoder(QueueService):
+    def __init__(self, outputchannels, **kwargs):
+        QueueService.__init__(self, name="MEAME_DECODER", **kwargs)
+        self.outputchannels = outputchannels
+        self.action = np.array(["None", "Rock", "Scissor", "Paper"])
+        self.action_values = np.array([10,15,20,25])
+    
+    def run(self):
+        while(True):
+            freq = 0
+            channel_freqs = self.get()
+            if channel_freqs is False:
+                self.end()
+                return
+
+            for i in self.outputchannels:
+                freq+= channel_freqs[i]
+                
+            freq = freq/len(self.outputchannels)
+            idx = (np.abs(self.action_values-freq)).argmin() 
+            self.put(self.action[idx])
+
+        
+
 
 def main():
-    mode = CrepeModus.LIVE
+    mode = CrepeModus.OFFLINE
 
     # Make functions ready to be inserted into the pipeline
     queue_services = list()
     
+    #Frequency extractor
     frequency_ex_kwargs = {"N":10000, "bitrate":10000}
     queue_services.append([FrequencyExtractor, frequency_ex_kwargs])
+     
+    #Meame-decoder
+    outputchannels = [0,3,6]
+    meame_decoder_kwargs = { "outputchannels":outputchannels }
+    queue_services.append([MeameDecoder, meame_decoder_kwargs])
+
     crep = CREPE(modus=mode, queue_services = queue_services)
 
     end = QueueService(name="END", queue_in=crep.get_last_queue())
