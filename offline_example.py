@@ -9,8 +9,8 @@ path_to_test_data_folder = __currentdir + "/test_data/"
 
 #Output of meame_listener will be 60*100 numpy arrays by default
 class FrequencyExtractor(QueueService):
-    def __init__(self, N = 10000, bitrate = 10000, cutoff = 500, in_seg_len = 100, queue_in = None, queue_out = None):
-        QueueService.__init__(self, name="FREQ_EXTRACT" , queue_out=queue_out, queue_in=queue_in)
+    def __init__(self, N = 10000, bitrate = 10000, cutoff = 500, in_seg_len = 100, **kwargs):
+        QueueService.__init__(self, name="FREQ_EXTRACT" , **kwargs)
         self.N = N
         self.bitrate = bitrate
         self.cutoff = cutoff
@@ -25,6 +25,7 @@ class FrequencyExtractor(QueueService):
             F = np.fft.rfft(x, axis = 1)
             T = self.N/self.bitrate
             top_freq = np.argmax(np.abs(F[:,:self.cutoff]), axis = 1)/T
+            print(top_freq)
             self.put(top_freq)
         
 class MeameDecoder(QueueService):
@@ -47,13 +48,14 @@ class MeameDecoder(QueueService):
                 
             freq = freq/len(self.outputchannels)
             idx = (np.abs(self.action_values-freq)).argmin() 
+            print(self.action[idx])
             self.put(self.action[idx])
 
         
 
 
 def main():
-    mode = CrepeModus.OFFLINE
+    mode = CrepeModus.LIVE
 
     # Make functions ready to be inserted into the pipeline
     queue_services = list()
@@ -63,20 +65,29 @@ def main():
     queue_services.append([FrequencyExtractor, frequency_ex_kwargs])
      
     #Meame-decoder
-    outputchannels = [0,3,6]
+    outputchannels = [0,2,3,5,7,8,50,51,54,56,57,59]
     meame_decoder_kwargs = { "outputchannels":outputchannels }
     queue_services.append([MeameDecoder, meame_decoder_kwargs])
 
+    hw_api_kwargs = {}
+    queue_services.append([HWAPIWrapper, hw_api_kwargs])
+
+    ir_pro_kwargs = {}
+    queue_services.append([IRPreprocessor, ir_pro_kwargs])
+
+    #Start CREPE
     crep = CREPE(modus=mode, queue_services = queue_services)
 
-    end = QueueService(name="END", queue_in=crep.get_last_queue())
+    #Retrieve the output of data flow for debugging purposes
+#    end = QueueService(name="END", queue_in=crep.get_last_queue())
     while True:
-        data = end.get()
-        print("Got: ", data)
-        if data is False:
-            print("shutting down crepe")
-            crep.shutdown()
-            return
+        pass
+#        data = end.get()
+#        print("Got: ", data)
+#        if data is False:
+#            print("shutting down crepe")
+#            crep.shutdown()
+#            return
 
 if __name__ == "__main__":
     main()
