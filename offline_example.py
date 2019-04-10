@@ -1,4 +1,7 @@
-from CREPE import CREPE, CrepeModus, get_queue, QueueService 
+from CREPE import CREPE, CrepeModus, get_queue, QueueService, HWAPIWrapper 
+from CREPE.communication.meame_speaker.config_decimal import *
+from CREPE.communication.meame_speaker.speaker import *
+from ir_preprocessor import IRPreprocessor
 
 import time
 import os,sys,inspect 
@@ -56,6 +59,7 @@ class MeameDecoder(QueueService):
 
 def main():
     mode = CrepeModus.LIVE
+    do_remote_example()
 
     # Make functions ready to be inserted into the pipeline
     queue_services = list()
