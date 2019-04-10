@@ -6,6 +6,8 @@ from ir_preprocessor import IRPreprocessor
 import time
 import os,sys,inspect 
 import numpy as np
+import matplotlib.pyplot as plt
+
 # Find the path to the test_data folder.
 __currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 path_to_test_data_folder = __currentdir + "/test_data/"
@@ -20,16 +22,22 @@ class FrequencyExtractor(QueueService):
 
     def run(self):
         while(True):
-            x = self.get_n_col(self.N, 60, 100)
+#            i = 0
+            #x = self.get_n_col(self.N, 60, 100)
+            x = self.get()
             if(x is False):
                 self.end()
                 return
 
+#            if i ==1:
+#                plt.plot(np.arange(10000), x)
+#                plt.show()
             F = np.fft.rfft(x, axis = 1)
             T = self.N/self.bitrate
             top_freq = np.argmax(np.abs(F[:,:self.cutoff]), axis = 1)/T
             print(top_freq)
             self.put(top_freq)
+#            i+=1
         
 class MeameDecoder(QueueService):
     def __init__(self, outputchannels, **kwargs):
@@ -54,16 +62,35 @@ class MeameDecoder(QueueService):
             print(self.action[idx])
             self.put(self.action[idx])
 
-        
+class MovingAvg(QueueService):
+    def __init__(self, N = 10000, n = 100, **kwargs):
+        QueueService.__init__(self, name="MOVING_AVG", **kwargs)
+        self.N = N
+        self.n = n
+
+    def run(self):
+        while(True):
+            y = self.get_n_col(self.N, 60, 100)
+            if(y is False):
+                self.end()
+                return
+
+            ret = np.cumsum(np.concatenate((y,np.zeros((60,self.n-1))),axis=1), dtype=float, axis = 1)
+            ret[:,self.n:] = ret[:,self.n:] - ret[:,:-self.n]
+            self.put(ret[:,self.n - 1:] / self.n)
 
 
 def main():
     mode = CrepeModus.LIVE
-    do_remote_example()
+    #do_remote_example()
 
     # Make functions ready to be inserted into the pipeline
     queue_services = list()
     
+    #moving average
+    moving__avg_kwargs = {"N":10000, "n":100}
+    queue_services.append([MovingAvg, moving__avg_kwargs])
+
     #Frequency extractor
     frequency_ex_kwargs = {"N":10000, "bitrate":10000}
     queue_services.append([FrequencyExtractor, frequency_ex_kwargs])
