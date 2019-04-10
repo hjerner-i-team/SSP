@@ -1,7 +1,5 @@
 import json
 from CREPE import QueueService
-from CREPE.communication.meame_speaker.config_decimal import *
-from CREPE.communication.meame_speaker.speaker import *
 
 
 # TODO: Input validation and error messages
@@ -23,8 +21,6 @@ class IRPreprocessor(QueueService):
             name=name, 
             **kwargs
         )
-        # Pre-defined stimuli group to work with
-        self.stim_group = 0
         
         # Set a threshold for whether or not a pixel is part of hand or not.
         self.on_threshold = 25
@@ -35,9 +31,6 @@ class IRPreprocessor(QueueService):
         self.scissors_threshold = 28 #TODO: Placeholder
         self.paper_threshold = 36  # TODO: placeholder
 
-        # Initialize the MEAME server with desired config
-        #do_remote_example()
-        template_setup()
         
 
     def run(self):
@@ -48,8 +41,7 @@ class IRPreprocessor(QueueService):
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
             print("CONCLUSION: " + conclusion)
-            # Send processed data to meame
-            self.meame_encoder(conclusion)
+            self.put(conclusion)
     
             
     def analyze_simple(self, ir_mat):
@@ -77,19 +69,3 @@ class IRPreprocessor(QueueService):
             return "Paper"
         
 
-    def meame_encoder(self, guess):
-        ''' 
-        Translates the preprocessed data, in this case the system's current
-        guess, into a set of stimuli instructions and transmits them to 
-        MEAME
-        :param str guess: A string, either "None", "Rock", "Paper", or 
-        "Scissors".
-        Returns status of transmission
-        '''
-        periods = {
-            "None": 5000,
-            "Rock": 2500,
-            "Scissors": 1650,
-            "Paper": 1250,
-        }
-        set_stim(self.stim_group, periods[guess])
