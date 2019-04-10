@@ -36,7 +36,7 @@ def get_data_from_meame_direct_from_queue(crep):
                 break
         except: # .get raises error on timeout
             break
-        # Add the length of this data
+      s   # Add the length of this data
         len_of_stream += len(data[0])
 
     print("The length of a row is ", len_of_stream)

@@ -12,7 +12,7 @@ path_to_test_data_folder = __currentdir + "/test_data/"
 # Feel free to change this method, currently it is for testing purposes
 def main():
     # Get the absolute path for the test file
-    path_to_data = path_to_test_data_folder + "4.h5"
+    path_to_data = path_to_test_data_folder + "3.h5"
 
     # Make functions ready to be inserted into the pipeline
     queue_services = list()

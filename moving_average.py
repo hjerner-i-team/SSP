@@ -7,7 +7,7 @@ class MovingAvg(QueueService):
 
         self.mov_avg_size = mov_avg_size
         
-        self.stream = GrowingArray(60, self.mov_avg_size * 2)
+        self.stream = GrowingArray(60, self.mov_avg_size * 1000)
 
         data = self.get_x_elems(x_elems=self.mov_avg_size)
         self.stream.add(data)
@@ -21,9 +21,7 @@ class MovingAvg(QueueService):
             if (i + self.mov_avg_size >= len(self.stream)):
                 data = self.get()
                 if data is False:
-                    self.end()
                     return
-
                 self.stream.add(data)
             processed = self.moving_average(i) 
             self.put(processed)
