@@ -22,9 +22,12 @@ def main():
 
     readout_layer_kwargs = {}
     queue_services.append([ReadoutLayer, readout_layer_kwargs])
-
+    
+    # Maeame speaker args CREPE
+    meame_speaker_periods = { "None": 5000, "Rock": 2500, "Scissors": 1650, "Paper": 1250, }
+    
     #Create a crepe object and start it
-    crep = CREPE(modus=CrepeModus.TEST, file_path=path_to_data, queue_services=queue_services)
+    crep = CREPE(modus=CrepeModus.TEST, meame_speaker_periods=meame_speaker_periods, file_path=path_to_data, queue_services=queue_services)
     
     crep.wait()
     # if you want to do something with the data from the last queue, then send in a function:
