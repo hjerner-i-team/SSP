@@ -2,6 +2,7 @@ from CREPE import CREPE, CrepeModus, get_queue, QueueService, HWAPIWrapper
 from CREPE.communication.meame_speaker.config_decimal import *
 from CREPE.communication.meame_speaker.speaker import *
 from ir_preprocessor import IRPreprocessor
+from plotter import VisdomLinePlotter
 
 import time
 import os,sys,inspect 
@@ -14,30 +15,32 @@ path_to_test_data_folder = __currentdir + "/test_data/"
 
 #Output of meame_listener will be 60*100 numpy arrays by default
 class FrequencyExtractor(QueueService):
-    def __init__(self, N = 10000, bitrate = 10000, cutoff = 500, in_seg_len = 100, **kwargs):
+    def __init__(self, N = 10000, bitrate = 10000, cutoff = 100, in_seg_len = 100, **kwargs):
         QueueService.__init__(self, name="FREQ_EXTRACT" , **kwargs)
         self.N = N
         self.bitrate = bitrate
         self.cutoff = cutoff
 
     def run(self):
+        i=0
         while(True):
-#            i = 0
             #x = self.get_n_col(self.N, 60, 100)
-            x = self.get()
-            if(x is False):
+            y = self.get()
+            if(y is False):
                 self.end()
                 return
 
-#            if i ==1:
-#                plt.plot(np.arange(10000), x)
-#                plt.show()
-            F = np.fft.rfft(x, axis = 1)
+
+            F = np.fft.rfft(y, axis = 1)
             T = self.N/self.bitrate
+            w = np.fft.rfftfreq(self.N,T/self.N)
+
+            plotter.plot(np.arange(self.N), y[0,:], 'AVG','moving average channel 0')
+            plotter.plot(w[:self.cutoff], np.abs(F[0,:self.cutoff]), 'FREQ','frequency channel 0')
+
             top_freq = np.argmax(np.abs(F[:,:self.cutoff]), axis = 1)/T
             print(top_freq)
             self.put(top_freq)
-#            i+=1
         
 class MeameDecoder(QueueService):
     def __init__(self, outputchannels, **kwargs):
@@ -81,7 +84,9 @@ class MovingAvg(QueueService):
 
 
 def main():
-    mode = CrepeModus.LIVE
+    global plotter
+    plotter = VisdomLinePlotter(env_name='CREPE')
+    mode = CrepeModus.OFFLINE
     #do_remote_example()
 
     # Make functions ready to be inserted into the pipeline
@@ -100,9 +105,11 @@ def main():
     meame_decoder_kwargs = { "outputchannels":outputchannels }
     queue_services.append([MeameDecoder, meame_decoder_kwargs])
 
+    #HW-api
     hw_api_kwargs = {}
     queue_services.append([HWAPIWrapper, hw_api_kwargs])
 
+    #IR-preprocessor
     ir_pro_kwargs = {}
     queue_services.append([IRPreprocessor, ir_pro_kwargs])
 
