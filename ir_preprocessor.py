@@ -23,7 +23,7 @@ class IRPreprocessor(QueueService):
         )
         
         # Set a threshold for whether or not a pixel is part of hand or not.
-        self.on_threshold = 25
+        self.on_threshold = 20
 
         # Set some thresholds for how many pixels a rock, scissors and paper
         # have.
