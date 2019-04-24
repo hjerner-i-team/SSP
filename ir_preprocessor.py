@@ -36,7 +36,8 @@ class IRPreprocessor(QueueService):
     def run(self):
         while True:
             # Fetch new json item to process
-            new_data_j = self.get()
+            new_data_j = str(self.get())[2:-1]
+            print(new_data_j)
             new_data = json.loads(new_data_j)
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
@@ -59,11 +60,15 @@ class IRPreprocessor(QueueService):
             for j in range(0, mat_M):
                 if ir_mat[i][j] > self.on_threshold: 
                     on_count += 1
+        print("PixelCount", on_count)
         if on_count < self.rock_threshold:
+            print("ir_none")
             return "None"
         elif on_count < self.scissors_threshold:
+            print("ir_rock")
             return "Rock"
         elif on_count < self.paper_threshold: 
+            print("ir_scissor")
             return "Scissors"
         else:
             return "Paper"
