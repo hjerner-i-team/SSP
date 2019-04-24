@@ -41,7 +41,7 @@ class IRPreprocessor(QueueService):
             new_data = json.loads(new_data_j)
 
             #plot heatmap
-            plotter.plot_map(new_data, "IMG", "input image")
+            #plotter.plot_map(new_data, "IMG", "input image")
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
             print("CONCLUSION: " + conclusion)
