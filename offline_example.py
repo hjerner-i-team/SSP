@@ -114,9 +114,12 @@ def main():
     #IR-preprocessor
     ir_pro_kwargs = {}
     queue_services.append([IRPreprocessor, ir_pro_kwargs])
+    
+    # Maeame speaker args CREPE
+    meame_speaker_periods = { "None": 5000, "Rock": 2500, "Scissors": 1650, "Paper": 1250, }
 
     #Start CREPE
-    crep = CREPE(modus=mode, queue_services = queue_services)
+    crep = CREPE(modus=mode, meame_speaker_periods=meame_speaker_periods, queue_services = queue_services)
 
     #Retrieve the output of data flow for debugging purposes
 #    end = QueueService(name="END", queue_in=crep.get_last_queue())
