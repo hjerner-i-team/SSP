@@ -29,7 +29,7 @@ class IRPreprocessor(QueueService):
         # Set some thresholds for how many pixels a rock, scissors and paper
         # have.
         self.rock_threshold = 3  # TODO: Placeholder
-        self.scissors_threshold = 9 #TODO: Placeholder
+        self.scissors_threshold = 7 #TODO: Placeholder
         self.paper_threshold = 14  # TODO: placeholder
 
         
