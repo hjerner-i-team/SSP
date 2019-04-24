@@ -88,7 +88,7 @@ class MovingAvg(QueueService):
 def main():
     global plotter
     plotter = VisdomLinePlotter(env_name='CREPE')
-    mode = CrepeModus.OFFLINE
+    mode = CrepeModus.LIVE
     #do_remote_example()
 
     # Make functions ready to be inserted into the pipeline
