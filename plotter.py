@@ -24,4 +24,21 @@ class VisdomLinePlotter:
         else: 
             self.viz.line(X=x,Y=y, win=win, update='replace')
         
+# heatmap
+    def plot_map(self, x, win, title):
+        if win not in self.plots:
+            self.plots.append(win)
+            viz.heatmap(
+                X=x,
+                win=win,
+                opts=dict(colormap='Electric',)   
+            )
+
+        else:
+            viz.heatmap(
+                X=x,
+                win=win,
+                update='replace'
+            )
+
 
