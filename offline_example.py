@@ -36,7 +36,7 @@ class FrequencyExtractor(QueueService):
             w = np.fft.rfftfreq(self.N,T/self.N)
 
             plotter.plot(np.arange(self.N), y[0,:], 'AVG','moving average channel 0')
-            plotter.plot(w[:self.cutoff], np.abs(F[0,:self.cutoff]), 'FREQ','frequency channel 0')
+            plotter.plot(w[:self.cutoff], np.abs(F[0,:self.cutoff]), 'FFT','FFT channel 0')
 
             top_freq = np.argmax(np.abs(F[:,:self.cutoff]), axis = 1)/T
             print(top_freq)
@@ -78,6 +78,8 @@ class MovingAvg(QueueService):
                 self.end()
                 return
 
+
+            plotter.plot(np.arange(self.N), y[0,:], 'RAW','meame output channel 0')
             ret = np.cumsum(np.concatenate((y,np.zeros((60,self.n-1))),axis=1), dtype=float, axis = 1)
             ret[:,self.n:] = ret[:,self.n:] - ret[:,:-self.n]
             self.put(ret[:,self.n - 1:] / self.n)
