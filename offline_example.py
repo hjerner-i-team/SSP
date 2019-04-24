@@ -116,7 +116,7 @@ def main():
     queue_services.append([HWAPIWrapper, hw_api_kwargs])
 
     #IR-preprocessor
-    ir_pro_kwargs = {queue_plot:queue_plot}
+    ir_pro_kwargs = {"queue_plot":queue_plot}
     queue_services.append([IRPreprocessor, ir_pro_kwargs])
     
     # Maeame speaker args CREPE

@@ -28,17 +28,17 @@ class VisdomLinePlotter:
     def plot_map(self, x, win, title):
         if win not in self.plots:
             self.plots.append(win)
-            viz.heatmap(
+            self.viz.heatmap(
                 X=x,
                 win=win,
                 opts=dict(colormap='Electric',)   
             )
 
         else:
-            viz.heatmap(
+            self.viz.heatmap(
                 X=x,
                 win=win,
-                update='replace'
+                opts=dict(colormap='Electric',)   
             )
 
 #global plotter

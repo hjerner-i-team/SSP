@@ -52,7 +52,7 @@ class IRPreprocessor(QueueService):
             new_data = np.array(new_data)
             #plot heatmap
             #plotter.plot_map(new_data, "IMG", "input image")
-            queue_plot.put(new_data)
+            self.queue_plot.put(new_data)
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
             print("CONCLUSION: " + conclusion)
