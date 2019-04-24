@@ -2,7 +2,7 @@ import json
 from CREPE import QueueService
 import math
 from plotter import *
-
+import numpy as np
 
 # TODO: Input validation and error messages
 
@@ -17,6 +17,8 @@ from plotter import *
 class IRPreprocessor(QueueService):
 
     def __init__(self, name="IRPrePros", **kwargs):
+        #global plotter
+        #plotter = VisdomLinePlotter(env_name='CREPE')
         # Initialize queue service
         QueueService.__init__(
             self, 
@@ -41,9 +43,9 @@ class IRPreprocessor(QueueService):
             new_data_j = str(self.get())[2:-1]
             print(new_data_j)
             new_data = json.loads(new_data_j)
-
+            new_data = np.array(new_data)
             #plot heatmap
-            plotter.plot_map(new_data, "IMG", "input image")
+            #plotter.plot_map(new_data, "IMG", "input image")
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
             print("CONCLUSION: " + conclusion)
@@ -61,9 +63,9 @@ class IRPreprocessor(QueueService):
 
         # only take the upper rigth quadrant
         x = math.floor(len(ir_mat)/2)
-        y = math.floor(len(ir_mat[0]/2))
+        y = math.floor(len(ir_mat[0])/2)
         ir_mat = ir_mat[...,y:]
-        ir_mat = ir_math[:x,...]
+        ir_mat = ir_mat[:x,...]
 
         mat_N = len(ir_mat)  # Number of rows
         mat_M = len(ir_mat[0])  # Number of columns
