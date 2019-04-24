@@ -41,4 +41,4 @@ class VisdomLinePlotter:
                 update='replace'
             )
 
-global plotter
+#global plotter
