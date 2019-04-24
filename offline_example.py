@@ -2,7 +2,7 @@ from CREPE import CREPE, CrepeModus, get_queue, QueueService, HWAPIWrapper
 from CREPE.communication.meame_speaker.config_decimal import *
 from CREPE.communication.meame_speaker.speaker import *
 from ir_preprocessor import IRPreprocessor
-from plotter import VisdomLinePlotter
+from plotter import * 
 
 import time
 import os,sys,inspect 
@@ -86,7 +86,7 @@ class MovingAvg(QueueService):
 
 
 def main():
-    global plotter
+    #global plotter
     plotter = VisdomLinePlotter(env_name='CREPE')
     mode = CrepeModus.LIVE
     #do_remote_example()
