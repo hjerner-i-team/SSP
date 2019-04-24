@@ -8,6 +8,7 @@ import time
 import os,sys,inspect 
 import numpy as np
 import matplotlib.pyplot as plt
+from multiprocessing import Queue
 
 # Find the path to the test_data folder.
 __currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -88,6 +89,9 @@ class MovingAvg(QueueService):
 def main():
     global plotter
     plotter = VisdomLinePlotter(env_name='CREPE')
+    queue_plot = Queue()
+
+
     mode = CrepeModus.LIVE
     #do_remote_example()
 
@@ -112,7 +116,7 @@ def main():
     queue_services.append([HWAPIWrapper, hw_api_kwargs])
 
     #IR-preprocessor
-    ir_pro_kwargs = {}
+    ir_pro_kwargs = {queue_plot:queue_plot}
     queue_services.append([IRPreprocessor, ir_pro_kwargs])
     
     # Maeame speaker args CREPE
@@ -124,7 +128,8 @@ def main():
     #Retrieve the output of data flow for debugging purposes
 #    end = QueueService(name="END", queue_in=crep.get_last_queue())
     while True:
-        pass
+        data = queue_plot.get()
+        plotter.plot_map(data, "IMG", "input image")
 #        data = end.get()
 #        print("Got: ", data)
 #        if data is False:

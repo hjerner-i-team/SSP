@@ -16,7 +16,7 @@ import numpy as np
 
 class IRPreprocessor(QueueService):
 
-    def __init__(self, name="IRPrePros", **kwargs):
+    def __init__(self, name="IRPrePros", queue_plot=None, **kwargs):
         #global plotter
         #plotter = VisdomLinePlotter(env_name='CREPE')
         # Initialize queue service
@@ -25,6 +25,12 @@ class IRPreprocessor(QueueService):
             name=name, 
             **kwargs
         )
+
+        if queue_plot is not None:
+            self.queue_plot = queue_plot
+        else:
+            print("Error: queue_plot not recived")
+            raise ValueError()
         
         # Set a threshold for whether or not a pixel is part of hand or not.
         self.on_threshold = 20
@@ -46,6 +52,7 @@ class IRPreprocessor(QueueService):
             new_data = np.array(new_data)
             #plot heatmap
             #plotter.plot_map(new_data, "IMG", "input image")
+            queue_plot.put(new_data)
             # Try to get data from it
             conclusion = self.analyze_simple(new_data)
             print("CONCLUSION: " + conclusion)
