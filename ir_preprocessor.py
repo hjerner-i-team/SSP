@@ -27,9 +27,9 @@ class IRPreprocessor(QueueService):
 
         # Set some thresholds for how many pixels a rock, scissors and paper
         # have.
-        self.rock_threshold = 20  # TODO: Placeholder
-        self.scissors_threshold = 28 #TODO: Placeholder
-        self.paper_threshold = 36  # TODO: placeholder
+        self.rock_threshold = 20/4  # TODO: Placeholder
+        self.scissors_threshold = 28/4 #TODO: Placeholder
+        self.paper_threshold = 36/4  # TODO: placeholder
 
         
 
@@ -56,6 +56,13 @@ class IRPreprocessor(QueueService):
         :param byte[] ir_mat: NxM IR data matrix
         Returns one of 4 conclusions: "None", "Rock", "Scissors" or "Paper"
         '''
+
+        # only take the upper rigth quadrant
+        x = math.floor(len(ir_mat)/2)
+        y = math.floor(len(ir_mat[0]/2))
+        ir_mat = ir_mat[...,y:]
+        ir_mat = ir_math[:x,...]
+
         mat_N = len(ir_mat)  # Number of rows
         mat_M = len(ir_mat[0])  # Number of columns
         on_count = 0
