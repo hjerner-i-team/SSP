@@ -1,3 +1,5 @@
 /CREPE/*
 CREPE
 /test_data/*
+__pycache__/*
+/env/*
