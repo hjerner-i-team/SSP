@@ -48,7 +48,7 @@ class MeameDecoder(QueueService):
         QueueService.__init__(self, name="MEAME_DECODER", **kwargs)
         self.outputchannels = outputchannels
         self.action = np.array(["None", "Rock", "Scissor", "Paper"])
-        self.action_values = np.array([10,15,20,25])
+        self.action_values = np.array([10,20,30,40])
     
     def run(self):
         while(True):
