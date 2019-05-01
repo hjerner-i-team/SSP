@@ -1,4 +1,4 @@
-### Setup of demo, physical components and configuraton
+### Setup description of the rock, paper, scissor hardware demo.
 
 **Components:**
 - Raspberry Pi Model 3 B+
@@ -21,7 +21,7 @@ The Arduino Uno was intended to interface, through a custom PCB shield, the AMG8
 Problems arose when most documentation surrounding usage of the ESP8266 ended after establishing a connection to an access point, leaving no proper documentation for how to send and receive data from servers. This configuration was then deprecated due to the difficulty of configuring the ESP8266 to establish an interface to the CREPE HTTP REST API. 
 A Raspberry Pi was chosen as a substitute 
 
-**Overview of complete setup:**
+### Overview of complete setup
 All hardware is mounted inside a 3D printed container, powered by a 2.1A power bank also mounted inside. The Raspberry Pi, 1.44" TFT LCD dislay and AMG8833 IR-sensor are mounted in the interior of the box. The AMG8833 can capture infrared data through a slit in the box, and a slit is made for the display as well. An adjustable plate is attached to the bottom of the container. This plate is equipped with a button, used for registering the presence of the hand of the user. 
 The display will inform the user of what state the system is currently in, and will iterate thorugh:
  - WAIT: The script is booting, loading necessary libraries and initializes the display, sensor and hardware interrupt for the pushbutton.
