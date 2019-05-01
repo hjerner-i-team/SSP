@@ -24,7 +24,7 @@ Problems arose when most documentation surrounding usage of the ESP8266 ended af
 A Raspberry Pi was chosen as a substitute 
 
 ### Overview of complete setup
-All hardware is mounted inside a 3D printed container, powered by a 2.1A power bank also mounted inside. The Raspberry Pi, 1.44" TFT LCD dislay and AMG8833 IR-sensor are mounted in the interior of the box. The AMG8833 can capture infrared data through a slit in the box, and a slit is made for the display as well. An adjustable plate is attached to the bottom of the container. This plate is equipped with a button, used for registering the presence of the hand of the user. 
+All hardware is mounted inside a 3D printed container, powered by a 2.1A power bank also mounted inside. The Raspberry Pi, 1.44" TFT LCD dislay and AMG8833 IR-sensor are mounted in the interior of the box. The AMG8833 can capture infrared data through a slit in the box, and a slit is made for the display as well. An adjustable plate is attached to the bottom of the container. This plate is equipped with a button, used for registering the presence of the hand of the user. The distance between the sensor and pushbutton to optimaly cover the users hand was found by trial and error. The sensor data was visualized by running main_with_visualization.py and the distance adjusted accordingly. The disctance used in this demo was **15cm**.
 The display will inform the user of what state the system is currently in, and will iterate thorugh:
  - WAIT: The script is booting, loading necessary libraries and initializes the display, sensor and hardware interrupt for the pushbutton.
  - READY: The script is suspended and waiting for a hardware interrupt initiated by pressing down the pushbutton.
