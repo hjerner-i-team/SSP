@@ -18,7 +18,7 @@
 **Initial Attempt:**
 
 A system driving the AMG8833 and LCD display using an Arduino Uno + ESP8266 was initially attempted. 
-The Arduino Uno was intended to interface, through a custom PCB shield, the AMG8833 IR-sensor, ESP8266 wifi module and the TFT LCD Display.
+The Arduino Uno was intended to interface, through a custom PCB shield, the AMG8833 IR-sensor, ESP8266 wifi module and the TFT LCD Display. The PCB shield was mainly needed for voltage regulation and level shifting between the 5V Arduino and 3.3V ESP8266.
 Problems arose when most documentation surrounding usage of the ESP8266 ended after establishing a connection to an access point, leaving no proper documentation for how to send and receive data from servers. This configuration was then deprecated due to the difficulty of configuring the ESP8266 to establish an interface to the CREPE HTTP REST API. 
 A Raspberry Pi was chosen as a substitute 
 
