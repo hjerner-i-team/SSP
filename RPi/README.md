@@ -1,4 +1,5 @@
 ### Setup description of the rock, paper, scissor hardware demo.
+This page will describe the hardware demo used in this project such that it could be completely replicated solely based on the information found here. It will cover physical hardware components, how they interface the Raspberry Pi, and how the Raspberry Pi must be configured to replicate the demo.
 
 **Components:**
 - Raspberry Pi Model 3 B+
