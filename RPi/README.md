@@ -25,9 +25,36 @@ The harware is mounted inside a 3D printed container, powered by a power bank al
 **Raspberry Pi: setup**
 The Arduino Uno is through a PCB shield equipped with the IR-sensor, wifi module and the LCD Display. It captures the IR profile of a rock/paper/scissor and transmits this to CREPE in json format. Results recieved from CREPE are displayed on the display. Capturing of data is triggered by the button mounted on the adjustable plate. 
 
-### Requisites 
- The Arduino Uno used is an un-official Arduino. It requires an USB-driver to connect to Windows. [Driver link]()
-- 
+### Physical Connections
+This section will describe the physical connections between each hardware component as used in this project. Other configurations may work, but this will require you to do the appropriate changes in code. The pins on the Raspberry Pi are described in both physical pins and Broadcom GPIO numbers (BCM). 
+It is very important to verify that there is good electrical conduction between all hardware components to ensure functional operation. A continuity test with a multimeter should suffice.
+
+**Pushbutton**
+This may vary depending on the type of pushbutton used, and it should be confirmed that the pins connected from the pushbutton are being shorted when pressed, as the script will react to a falling edge on the defined input pin.
+
+| Pushbutton | Raspberry Pi 3B+ |
+|------------|-----------------:|
+| Any        |  Pin 12 (BCM 18) |
+| Any        |     Pin 14 (GND) |
+
+**AMG8833 IR Sensor**
+| AMG8833 |   Raspberry Pi 3B+  |
+|:-------:|:-------------------:|
+| Vin     |        Pin 1 (3.3V) |
+| GND     |         Pin 9 (GND) |
+| SDA     | Pin 3 (BCM 2) (SDA) |
+| SCL     | Pin 5 (BCM 3) (SCL) |
+
+**TFT LCD Display**
+| LCD Display | Raspberry Pi 3B+ |
+|:-----------:|:----------------:|
+| Vin         |    Pin 17 (3.3V) |
+| GND         |     Pin 20 (GND) |
+| SCK         |  Pin 23 (BCM 11) |
+| SI          |  Pin 19 (BCM 10) |
+| TCS         |  Pin 24 (BCM 8 ) |
+| RST         |  Pin 22 (BCM 25) |
+| D/C         |  Pin 18 (BCM 24) |
 
 ### Installation
 
