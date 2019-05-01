@@ -16,14 +16,20 @@
   - [Datasheet](http://wiki.ai-thinker.com/_media/esp8266/docs/a001ps01a2_esp-01_product_specification_v1.2.pdf?fbclid=IwAR2E6Dpguf-HQLodjZ8DdVEVA4pAAcRWWhqb_sUmmcb46i1hmuMgdBjYaW4)
   
 **Initial Attempt:**
-A system driving the AMG8833 and LCD display using an Arduino Uno + ESP8266 was initially attempted. Problems arose when most documentation surrounding usage of the ESP8266 ended after establishing a connection to an access point, leaving no proper documentation for how to send and receive data from servers. This configuration was then deprecated due to the difficulty of configuring the ESP8266 to establish an interface to the CREPE HTTP REST API. 
+A system driving the AMG8833 and LCD display using an Arduino Uno + ESP8266 was initially attempted. 
+The Arduino Uno was intended to interface, through a custom PCB shield, the AMG8833 IR-sensor, ESP8266 wifi module and the TFT LCD Display.
+Problems arose when most documentation surrounding usage of the ESP8266 ended after establishing a connection to an access point, leaving no proper documentation for how to send and receive data from servers. This configuration was then deprecated due to the difficulty of configuring the ESP8266 to establish an interface to the CREPE HTTP REST API. 
 A Raspberry Pi was chosen as a substitute 
 
 **Overview of complete setup:**
-The harware is mounted inside a 3D printed container, powered by a power bank also mounted inside. A 1.44" TFT LCD dislay is mounted on he exterior of the container. The AMG8833 IR-sensor is mounted in the interior of the box, capturing data through a slot in the box. An adjustable plate is attached to the bottom of the container. This plate is equipped with a button, registering the hand of the subject. This button is connected to the Arduino.
-
-**Raspberry Pi: setup**
-The Arduino Uno is through a PCB shield equipped with the IR-sensor, wifi module and the LCD Display. It captures the IR profile of a rock/paper/scissor and transmits this to CREPE in json format. Results recieved from CREPE are displayed on the display. Capturing of data is triggered by the button mounted on the adjustable plate. 
+All hardware is mounted inside a 3D printed container, powered by a 2.1A power bank also mounted inside. The Raspberry Pi, 1.44" TFT LCD dislay and AMG8833 IR-sensor are mounted in the interior of the box. The AMG8833 can capture infrared data through a slit in the box, and a slit is made for the display as well. An adjustable plate is attached to the bottom of the container. This plate is equipped with a button, used for registering the presence of the hand of the user. 
+The display will inform the user of what state the system is currently in, and will iterate thorugh:
+ - WAIT: The script is booting, loading necessary libraries and initializes the display, sensor and hardware interrupt for the pushbutton.
+ - READY: The script is suspended and waiting for a hardware interrupt initiated by pressing down the pushbutton.
+ - PROCESSING: The script is transmitting the IR sensor data to the CREPE HTTP REST API and wait for a valid response from the same server.
+ - SERVER UNAVAILABLE: The script failed to contact the server, and is either due to lack of internet connectivity or an internal server failure. Will not be displayed if it succeeds to contact server.
+ - GESTURE: Displays (for 5 seconds) the hand gesture the system predicts will beat the one played by the user.
+ 
 
 ### Physical Connections
 This section will describe the physical connections between each hardware component as used in this project. Other configurations may work, but this will require you to do the appropriate changes in code. The pins on the Raspberry Pi are described in both physical pins and Broadcom GPIO numbers (BCM). 
