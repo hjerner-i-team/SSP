@@ -16,6 +16,7 @@
   - [Datasheet](http://wiki.ai-thinker.com/_media/esp8266/docs/a001ps01a2_esp-01_product_specification_v1.2.pdf?fbclid=IwAR2E6Dpguf-HQLodjZ8DdVEVA4pAAcRWWhqb_sUmmcb46i1hmuMgdBjYaW4)
   
 **Initial Attempt:**
+
 A system driving the AMG8833 and LCD display using an Arduino Uno + ESP8266 was initially attempted. 
 The Arduino Uno was intended to interface, through a custom PCB shield, the AMG8833 IR-sensor, ESP8266 wifi module and the TFT LCD Display.
 Problems arose when most documentation surrounding usage of the ESP8266 ended after establishing a connection to an access point, leaving no proper documentation for how to send and receive data from servers. This configuration was then deprecated due to the difficulty of configuring the ESP8266 to establish an interface to the CREPE HTTP REST API. 
@@ -36,6 +37,7 @@ This section will describe the physical connections between each hardware compon
 It is very important to verify that there is good electrical conduction between all hardware components to ensure functional operation. A continuity test with a multimeter should suffice.
 
 **Pushbutton**
+
 This may vary depending on the type of pushbutton used, and it should be confirmed that the pins connected from the pushbutton are being shorted when pressed, as the script will react to a falling edge on the defined input pin.
 
 | Pushbutton | Raspberry Pi 3B+ |
@@ -66,9 +68,10 @@ This may vary depending on the type of pushbutton used, and it should be confirm
 
 ### Installation
 
-To recreate this demonstration, Download the repository and follow instructions given in comments on each source file. Clone to Raspberry Pi. All code in this repository is intended to run on the Raspberry Pi 3 B+.
+To recreate this demonstration, download the repository and follow instructions given in comments on each source file. Clone to Raspberry Pi. All code in this repository is intended to use on the Raspberry Pi 3 B+ running Raspbian.
 
 **Eduroam**
+
 If you **DON'T** need the Raspberry Pi to be connected to an sduroam access point, skip this section. The following tutorial is confirmed on NTNU's eduroam network, and is not guaranteed to function properly on other eduroam networks. (It might though.)
 To enable the Raspberry Pi to correctly communicate with eduroam's radius servers, the wpa_supplicant service must be configured:
 
@@ -127,11 +130,13 @@ Copy the file main.py and the folder "graphics" from this repo onto the desktop 
 OPTIONAL: Copy the file main_with_visualization.py onto the desktop of your Raspberry Pi. This version is used for debugging, but will pause after gathering sensor data to display a (somewhat) human-interpretable, interpolated image of the IR data .
 
 **Installing [Adafruit's Python library for the AMG8833 IR sensor](https://github.com/adafruit/Adafruit_CircuitPython_AMG88xx):**
+
 ```
 sudo pip3 install adafruit-circuitpython-amg88xx
 ```
 
 **Installing ["Adafruit" ST7735R Library](https://github.com/KYDronePilot/Adafruit_ST7735r).** 
+
 This is an unofficial library derived from another official Adafruit LCD driver library. The motivation behind the use of this library is due to that the LCD display used in this project was originally intended for use with an Arduino, and thus the official Adafruit libraries are written for Arduino.  changed to enable use of the ST7735R LDC driver with Raspberry Pi. 
 
 ```
@@ -142,6 +147,7 @@ sudo python3 setup.py install (in the cloned git repository)
 ```
 
 **Run main.py automatically on boot**
+
 Create systemd unit to enable the main python script to run on boot. This configuration will also restart the script in the event of a failure. This [tutorial](https://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/) can be used as reference if something goes wrong, or if you want more details regarding this process.
 ```
 sudo nano /lib/systemd/system/CREPE.service
@@ -163,7 +169,7 @@ TimeoutSec=infinity
 WantedBy=graphical.target
 ```
 
-Now we need to register the service and enable it with systemctl such that it will run upon next boot.  **NOTE THAT ONLY ONE INSTANCE OF MAIN.PY CAN BE RUN AT ANY GIVEN TIME - ATTEMPTING TO MANUALLY RUN MAIN.PY WHILE THE SERVICE IS RUNNING WILL RESULT IN FAILURE**
+Now we need to register the service and enable it with systemctl such that it will run upon next boot.  **NOTE THAT ONLY ONE INSTANCE OF MAIN.PY CAN BE RUN AT ANY GIVEN TIME - ATTEMPTING TO MANUALLY RUN MAIN.PY WHILE THE SERVICE IS RUNNING WILL RESULT IN UNDEFINED BEHAVIOUR**
 ```
 sudo chmod 644 /lib/systemd/system/CREPE.service
 sudo systemctl daemon-reload
