@@ -38,6 +38,7 @@ This may vary depending on the type of pushbutton used, and it should be confirm
 | Any        |     Pin 14 (GND) |
 
 **AMG8833 IR Sensor**
+
 | AMG8833 |   Raspberry Pi 3B+  |
 |:-------:|:-------------------:|
 | Vin     |        Pin 1 (3.3V) |
@@ -46,6 +47,7 @@ This may vary depending on the type of pushbutton used, and it should be confirm
 | SCL     | Pin 5 (BCM 3) (SCL) |
 
 **TFT LCD Display**
+
 | LCD Display | Raspberry Pi 3B+ |
 |:-----------:|:----------------:|
 | Vin         |    Pin 17 (3.3V) |
