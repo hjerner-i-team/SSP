@@ -43,7 +43,6 @@ amg = adafruit_amg88xx.AMG88XX(i2c)
 TEMP_THRESHOLD = 19.9
 
 ## HTTP REST API communication specifications
-#URL = 'http://inca.ed.ntnu.no:8000'
 URL = 'http://129.241.209.138:5000'
 _GET_RESPONSE = '/hw-api/output/'
 _POST = '/hw-api/input/'
@@ -83,15 +82,14 @@ gfx_scissors = Image.open('/home/pi/Desktop/graphics/scissors.jpg')
 gfx_paper    = Image.open('/home/pi/Desktop/graphics/paper.jpg')
 gfx_rock     = Image.open('/home/pi/Desktop/graphics/rock.jpg')
 
+# Values in this dictionary are mapped to the winning opponent of the corresponding key value. "Paper beats rock", etc
 gfx_response = dict()
 gfx_response["Rock"]     = gfx_paper
 gfx_response["Paper"]    = gfx_scissors
 gfx_response["Scissor"]  = gfx_rock
 gfx_response["None"]     = gfx_server_unavailable
 
-r = [gfx_rock, gfx_paper, gfx_scissors] # DEBUG ONLY - REMOVE BEFORE DELIVERY
-i = 0 # DEBUG ONLY - REMOVE BEFORE DELIVERY
-
+# All printing streams in this loop are redirected to /home/pi/Desktop/CREPE.log to enable online debugging
 while True:
     # Wait for button press:
     print("Waiting for user input...")
@@ -117,11 +115,11 @@ while True:
     
     try:
         response = requests.post(URL + _POST, data = json_data, timeout=10.0)
-        #print(response.text) # UNCOMMENT
+        print(response.text)
     except:
         print("Server unavailable! (POST command)")
-        disp.display(gfx_server_unavailable) # UNCOMMENT
-        time.sleep(5) # UNCOMMENT
+        disp.display(gfx_server_unavailable)
+        time.sleep(5)
         continue # Restart loop
     
     # Wait for response from HTTP REST API
@@ -129,7 +127,6 @@ while True:
     time.sleep(2)
     while(1):
         try:
-            #break # REMOVE
             response = requests.get(URL + _GET_RESPONSE, timeout=10.0)
             
         except:
@@ -138,8 +135,7 @@ while True:
             time.sleep(5)
             break
             
-            
-        if response.text in ["Rock", "Paper", "Scissor", "None"]:
+        if response.text in ["Rock", "Paper", "Scissor", "None"]:  # "None" is an undefined behaviour, and will display "server not available" status message 
             print("Server response is", response.text)
             disp.display(gfx_response[response.text])
             time.sleep(5)
@@ -149,16 +145,7 @@ while True:
             time.sleep(0.2)
             continue
     
-    ###
-
-    
-    # Draw the image on the display hardware. DEBUG
-    #disp.display(r[i])
-    
     # End loop
-    #time.sleep(5) # DEBUG
-    i += 1 # DEBUG
-    i %= 3 # DEBUG
     
     
 
