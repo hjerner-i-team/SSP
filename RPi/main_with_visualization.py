@@ -1,3 +1,6 @@
+# DISCLAIMER: This script is older than main.py, and still contains some unneccessary bits of code used for development and debugging.
+# If the visualization capabilities are wanted integrated into main.py, simply copy the necessary bits of code to make it work.
+
 import numpy as np
 from scipy.interpolate import griddata
 from colour import Color
