@@ -43,7 +43,7 @@ amg = adafruit_amg88xx.AMG88XX(i2c)
 TEMP_THRESHOLD = 19.9
 
 ## HTTP REST API communication specifications
-URL = 'http://129.241.209.138:5000'
+URL = 'http://***************:5000'
 _GET_RESPONSE = '/hw-api/output/'
 _POST = '/hw-api/input/'
 TIMEOUT = 5000
